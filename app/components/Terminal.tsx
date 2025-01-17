@@ -1,77 +1,74 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useReducer, useRef, useEffect } from "react";
+import { commands } from "../commands/Commands";
+import CommandInput from "../commands/CommandInput";
+import { ReactNode } from "react";
+
+type HistoryEntry = string | ReactNode;
+
+type State = {
+  history: HistoryEntry[];
+};
+
+type Action = { type: "ADD_ENTRY"; entry: HistoryEntry } | { type: "CLEAR" };
+
+function historyReducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "ADD_ENTRY":
+      return { history: [...state.history, action.entry] };
+    case "CLEAR":
+      return { history: [] };
+    default:
+      return state;
+  }
+}
 
 export default function Terminal() {
-  const [history, setHistory] = useState<string[]>([
-    "Welcome to my CLI Portfolio.",
-    "Type 'help' to see available commands.",
-  ]);
-  const [input, setInput] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [state, dispatch] = useReducer(historyReducer, {
+    history: [
+      "Welcome to my CLI Portfolio.",
+      "Type 'help' to see available commands.",
+    ],
+  });
+
+  const terminalEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
+    terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [state.history]);
 
-  const commands: { [key: string]: string | (() => string) } = {
-    help: () =>
-      "Available commands: " +
-      `<span class="text-red-400">help</span>, ` +
-      `<span class="text-red-400">about</span>, ` +
-      `<span class="text-red-400">projects</span>, ` +
-      `<span class="text-red-400">contact</span>, ` +
-      `<span class="text-red-400">clear</span>`,
-    about:
-      "Hi, I'm Maurin. A developer passionate about technology and problem-solving.",
-    projects: "tbd",
-    contact: "Email: tbd | LinkedIn: tbd",
-    clear: () => {
-      setHistory([]);
-      return "";
-    },
-  };
+  const handleCommand = (input: string) => {
+    const commandKey = input.toLowerCase();
+    const command = commands[commandKey];
 
-  const handleCommand = () => {
-    if (!input.trim()) return;
+    dispatch({ type: "ADD_ENTRY", entry: `> ${input}` });
 
-    const command = input.toLowerCase();
-    const output = commands[command];
-
-    setHistory((prev) => [
-      ...prev,
-      `> ${input}`,
-      typeof output === "function"
-        ? output()
-        : output || "Command not found. Type 'help' for a list of commands.",
-    ]);
-
-    setInput("");
+    if (command) {
+      if (commandKey === "clear") {
+        dispatch({ type: "CLEAR" });
+      } else {
+        dispatch({ type: "ADD_ENTRY", entry: command.execute() ?? "" });
+      }
+    } else {
+      dispatch({
+        type: "ADD_ENTRY",
+        entry: "Command not found. Type 'help' for a list of commands.",
+      });
+    }
   };
 
   return (
     <div
       className="h-screen bg-black text-green-400 font-mono p-4 overflow-y-auto"
-      onClick={() => inputRef.current?.focus()}
+      onClick={() => terminalEndRef.current?.scrollIntoView()}
     >
-      {history.map((line, index) => (
-        <div
-          key={index}
-          className="whitespace-pre-wrap"
-          dangerouslySetInnerHTML={{ __html: line }}
-        />
+      {state.history.map((line, index) => (
+        <div key={index} className="whitespace-pre-wrap">
+          {line}
+        </div>
       ))}
-      <div className="flex">
-        <span className="text-green-300 mr-2">$</span>
-        <input
-          ref={inputRef}
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleCommand()}
-          className="bg-black text-green-400 border-none outline-none w-full"
-          autoFocus
-        />
-      </div>
+      <CommandInput onExecute={handleCommand} />
+      <div ref={terminalEndRef} />
     </div>
   );
 }
