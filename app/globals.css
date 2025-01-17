@@ -9,6 +9,7 @@
   --info: #ffbd41;
   --warn: #c9160f;
   --symb: #10b935;
+  --special: #b910ab;
 }
 
 /* Dark Mode */
@@ -18,6 +19,7 @@ html[data-theme="dark"] {
   --info: #ffbd41;
   --warn: #c9160f;
   --symb: #10b935;
+  --special: #b910ab;
 }
 
 /* Light Mode */
@@ -27,6 +29,7 @@ html[data-theme="light"] {
   --info: #0d187c;
   --warn: #c9160f;
   --symb: #000000;
+  --special: #b910ab;
 }
 
 /* Apply Theme */

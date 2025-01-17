@@ -7,7 +7,7 @@ import { ReactNode } from "react";
 
 export type Command = {
   description: string;
-  execute: () => string | ReactNode | void;
+  execute: (onGameOver?: () => void) => string | ReactNode | void;
 };
 
 export const commands: Record<string, Command> = {
@@ -29,7 +29,7 @@ export const commands: Record<string, Command> = {
   },
   snake: {
     description: "Play Snake",
-    execute: () => <Snake />,
+    execute: (onGameOver) => <Snake onGameOver={onGameOver} />,
   },
   clear: {
     description: "Clears the terminal",

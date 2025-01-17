@@ -36,6 +36,10 @@ export default function Help() {
           <span className="font-semibold text-[var(--info)]">light</span> -
           Switches to light mode
         </li>
+        <li>
+          <span className="font-semibold text-[var(--special)]">snake</span> -
+          Well ...
+        </li>
       </ul>
     </DefaultFrame>
   );

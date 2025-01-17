@@ -1,4 +1,4 @@
-import { useReducer, useRef, useEffect } from "react";
+import { useReducer, useRef, useEffect, useState } from "react";
 import { commands } from "../commands/Commands";
 import { useTheme } from "../context/ThemeContext";
 import { ReactNode } from "react";
@@ -15,10 +15,8 @@ type State = {
 type Action = { type: "ADD_ENTRY"; entry: HistoryEntry } | { type: "CLEAR" };
 
 export default function Terminal() {
-  const [state, dispatch] = useReducer(historyReducer, {
-    history: [],
-  });
-
+  const [state, dispatch] = useReducer(historyReducer, { history: [] });
+  const [isGameActive, setIsGameActive] = useState(false);
   const { theme, setTheme } = useTheme();
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
@@ -27,8 +25,9 @@ export default function Terminal() {
   }, [state.history]);
 
   const handleCommand = (input: string) => {
-    const commandKey = input.toLowerCase();
+    if (isGameActive) return;
 
+    const commandKey = input.toLowerCase();
     console.log("Received command:", commandKey);
 
     const commandOutput = (
@@ -36,6 +35,8 @@ export default function Terminal() {
         <span className="text-[var(--symb)]">{">"}</span> {input}
       </div>
     );
+
+    dispatch({ type: "ADD_ENTRY", entry: commandOutput });
 
     if (commandKey === "dark" || commandKey === "light") {
       dispatch({
@@ -46,12 +47,7 @@ export default function Terminal() {
       return;
     }
 
-    dispatch({
-      type: "ADD_ENTRY",
-      entry: commandOutput,
-    });
-
-    handleCommandExecution(commandKey, dispatch);
+    handleCommandExecution(commandKey, dispatch, setIsGameActive);
   };
 
   return (
@@ -63,7 +59,7 @@ export default function Terminal() {
             {line}
           </div>
         ))}
-        <CommandInput onExecute={handleCommand} />
+        {!isGameActive && <CommandInput onExecute={handleCommand} />}
         <div ref={terminalEndRef} />
       </div>
     </div>
@@ -97,12 +93,28 @@ const handleThemeChange = (
   }
 };
 
-const handleCommandExecution = (commandKey: string, dispatch: Function) => {
+const handleCommandExecution = (
+  commandKey: string,
+  dispatch: Function,
+  setIsGameActive: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   const command = commands[commandKey];
 
   if (command) {
     if (commandKey === "clear") {
       dispatch({ type: "CLEAR" });
+    } else if (commandKey === "snake") {
+      setIsGameActive(true);
+      dispatch({
+        type: "ADD_ENTRY",
+        entry: command.execute(() => {
+          setIsGameActive(false);
+          dispatch({
+            type: "ADD_ENTRY",
+            entry: <div className="text-[var(--warn)] mt-2">Game Over!</div>,
+          });
+        }),
+      });
     } else {
       dispatch({ type: "ADD_ENTRY", entry: command.execute() ?? "" });
     }
@@ -119,5 +131,3 @@ const handleCommandExecution = (commandKey: string, dispatch: Function) => {
     });
   }
 };
-
-export { handleThemeChange, handleCommandExecution };

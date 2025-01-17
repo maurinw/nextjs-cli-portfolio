@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 
-const GRID_SIZE = 20; // Number of cells in one row/column
-const CELL_SIZE = 20; // Size of each cell in pixels
-const SPEED = 100; // Snake speed (lower is faster)
+const GRID_SIZE = 20;
+const CELL_SIZE = 20;
+const SPEED = 100;
 
 const DIRECTIONS = {
   ArrowUp: { x: 0, y: -1 },
@@ -25,11 +25,15 @@ const getRandomPosition = (snake: Position[]): Position => {
     };
   } while (
     snake.some((segment) => segment.x === newPos.x && segment.y === newPos.y)
-  ); // Ensure food does not spawn on the snake
+  );
   return newPos;
 };
 
-const Snake = () => {
+type SnakeProps = {
+  onGameOver?: () => void;
+};
+
+const Snake = ({ onGameOver }: SnakeProps) => {
   const [snake, setSnake] = useState<Position[]>([{ x: 10, y: 10 }]);
   const [food, setFood] = useState<Position>(getRandomPosition(snake));
   const [direction, setDirection] = useState<Position>(DIRECTIONS.ArrowRight);
@@ -37,15 +41,13 @@ const Snake = () => {
   const [score, setScore] = useState(0);
 
   const directionRef = useRef(direction);
-  const gameLoopRef = useRef<number | null>(null);
+  const gameLoopRef = useRef<number | undefined>(undefined); // ✅ Change from `null` to `undefined`
 
-  // Handle key press
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       const newDirection = DIRECTIONS[event.key as DirectionKey];
       if (!newDirection) return;
 
-      // Prevent reversing direction (e.g., left -> right)
       if (
         directionRef.current.x + newDirection.x === 0 &&
         directionRef.current.y + newDirection.y === 0
@@ -61,9 +63,11 @@ const Snake = () => {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Game loop using setTimeout
   useEffect(() => {
-    if (isGameOver) return;
+    if (isGameOver) {
+      onGameOver?.(); // Call onGameOver callback when game ends
+      return;
+    }
 
     const moveSnake = () => {
       setSnake((prevSnake) => {
@@ -72,7 +76,6 @@ const Snake = () => {
           y: prevSnake[0].y + directionRef.current.y,
         };
 
-        // Check for wall collision
         if (
           newHead.x < 0 ||
           newHead.x >= GRID_SIZE ||
@@ -83,7 +86,6 @@ const Snake = () => {
           return prevSnake;
         }
 
-        // Check for self-collision
         if (
           prevSnake.some(
             (segment) => segment.x === newHead.x && segment.y === newHead.y
@@ -93,15 +95,13 @@ const Snake = () => {
           return prevSnake;
         }
 
-        // Move snake
         const newSnake = [newHead, ...prevSnake];
 
-        // Check if food is eaten
         if (newHead.x === food.x && newHead.y === food.y) {
-          setFood(getRandomPosition(newSnake)); // Generate new food
-          setScore((prevScore) => prevScore + 1); // Increase score
+          setFood(getRandomPosition(newSnake));
+          setScore((prevScore) => prevScore + 1);
         } else {
-          newSnake.pop(); // Remove tail
+          newSnake.pop();
         }
 
         return newSnake;
@@ -111,10 +111,13 @@ const Snake = () => {
     };
 
     gameLoopRef.current = window.setTimeout(moveSnake, SPEED);
+
     return () => {
-      if (gameLoopRef.current) clearTimeout(gameLoopRef.current);
+      if (gameLoopRef.current !== undefined) {
+        clearTimeout(gameLoopRef.current); // ✅ Ensure it's a valid number
+      }
     };
-  }, [isGameOver, food]); // Ensure food updates properly
+  }, [isGameOver, food]);
 
   return (
     <div className="flex flex-col items-center">
@@ -149,9 +152,6 @@ const Snake = () => {
           }}
         />
       </div>
-      {isGameOver && (
-        <div className="text-red-500 font-semibold mt-4">Game Over!</div>
-      )}
     </div>
   );
 };
