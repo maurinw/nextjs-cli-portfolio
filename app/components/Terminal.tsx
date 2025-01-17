@@ -14,17 +14,6 @@ type State = {
 
 type Action = { type: "ADD_ENTRY"; entry: HistoryEntry } | { type: "CLEAR" };
 
-function historyReducer(state: State, action: Action): State {
-  switch (action.type) {
-    case "ADD_ENTRY":
-      return { history: [...state.history, action.entry] };
-    case "CLEAR":
-      return { history: [] };
-    default:
-      return state;
-  }
-}
-
 export default function Terminal() {
   const [state, dispatch] = useReducer(historyReducer, {
     history: [],
@@ -42,6 +31,19 @@ export default function Terminal() {
 
     console.log("Received command:", commandKey);
 
+    if (commandKey === "dark" || commandKey === "light") {
+      dispatch({
+        type: "ADD_ENTRY",
+        entry: (
+          <div>
+            <span className="text-green-300">{">"}</span> {input}
+          </div>
+        ),
+      });
+      handleThemeChange(commandKey, setTheme, dispatch);
+      return;
+    }
+
     dispatch({
       type: "ADD_ENTRY",
       entry: (
@@ -51,39 +53,7 @@ export default function Terminal() {
       ),
     });
 
-    if (commandKey === "dark") {
-      console.log("Switching theme to dark...");
-      setTheme("dark");
-      dispatch({ type: "ADD_ENTRY", entry: "Switched to dark mode." });
-      return;
-    }
-    if (commandKey === "light") {
-      console.log("Switching theme to light...");
-      setTheme("light");
-      dispatch({ type: "ADD_ENTRY", entry: "Switched to light mode." });
-      return;
-    }
-
-    const command = commands[commandKey];
-
-    if (command) {
-      if (commandKey === "clear") {
-        dispatch({ type: "CLEAR" });
-      } else {
-        dispatch({ type: "ADD_ENTRY", entry: command.execute() ?? "" });
-      }
-    } else {
-      dispatch({
-        type: "ADD_ENTRY",
-        entry: (
-          <div className="text-red-500">
-            Command not found. Type{" "}
-            <span className="text-blue-500 dark:text-yellow-400">'help'</span>{" "}
-            to see available commands.
-          </div>
-        ),
-      });
-    }
+    handleCommandExecution(commandKey, dispatch);
   };
 
   return (
@@ -101,3 +71,55 @@ export default function Terminal() {
     </div>
   );
 }
+
+function historyReducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "ADD_ENTRY":
+      return { history: [...state.history, action.entry] };
+    case "CLEAR":
+      return { history: [] };
+    default:
+      return state;
+  }
+}
+
+const handleThemeChange = (
+  commandKey: string,
+  setTheme: Function,
+  dispatch: Function
+) => {
+  if (commandKey === "dark") {
+    console.log("Switching theme to dark...");
+    setTheme("dark");
+    dispatch({ type: "ADD_ENTRY", entry: "Switched to dark mode." });
+  } else if (commandKey === "light") {
+    console.log("Switching theme to light...");
+    setTheme("light");
+    dispatch({ type: "ADD_ENTRY", entry: "Switched to light mode." });
+  }
+};
+
+const handleCommandExecution = (commandKey: string, dispatch: Function) => {
+  const command = commands[commandKey];
+
+  if (command) {
+    if (commandKey === "clear") {
+      dispatch({ type: "CLEAR" });
+    } else {
+      dispatch({ type: "ADD_ENTRY", entry: command.execute() ?? "" });
+    }
+  } else {
+    dispatch({
+      type: "ADD_ENTRY",
+      entry: (
+        <div className="text-red-500">
+          Command not found. Type{" "}
+          <span className="text-blue-500 dark:text-yellow-400">'help'</span> to
+          see available commands.
+        </div>
+      ),
+    });
+  }
+};
+
+export { handleThemeChange, handleCommandExecution };
