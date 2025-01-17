@@ -75,17 +75,21 @@ export default function Terminal() {
     } else {
       dispatch({
         type: "ADD_ENTRY",
-        entry: "Command not found. Type 'help' for a list of commands.",
+        entry: (
+          <div className="text-red-500">
+            Command not found. Type{" "}
+            <span className="text-blue-500 dark:text-yellow-400">'help'</span>{" "}
+            to see available commands.
+          </div>
+        ),
       });
     }
   };
 
   return (
-    <div className="h-screen bg-[var(--background)] text-[var(--foreground)] font-mono flex flex-col items-center">
-      <div className="w-full flex justify-center mt-8">
-        <Welcome />
-      </div>
-      <div className="w-full max-w-screen-md md:w-3/5 p-4 border border-[var(--foreground)] rounded-lg shadow-lg overflow-y-auto mt-4">
+    <div className="h-screen bg-[var(--background)] text-[var(--foreground)] font-mono flex flex-col items-center pb-10">
+      <Welcome />
+      <div className="w-full max-w-screen-md md:w-3/5 p-4 rounded-lg overflow-y-auto mt-4 custom-scrollbar">
         {state.history.map((line, index) => (
           <div key={index} className="whitespace-pre-wrap">
             {line}
