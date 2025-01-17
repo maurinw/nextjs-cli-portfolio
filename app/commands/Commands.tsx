@@ -1,6 +1,7 @@
 import About from "../sections/About";
 import Projects from "../sections/Projects";
 import Contact from "../sections/Contact";
+import Help from "../sections/Help";
 import { ReactNode } from "react";
 
 export type Command = {
@@ -11,7 +12,7 @@ export type Command = {
 export const commands: Record<string, Command> = {
   help: {
     description: "Lists all available commands",
-    execute: () => "Available commands: help, about, projects, contact, clear",
+    execute: () => <Help />,
   },
   about: {
     description: "Displays information about me",

@@ -2,6 +2,7 @@
 import { useReducer, useRef, useEffect } from "react";
 import { commands } from "../commands/Commands";
 import CommandInput from "../commands/CommandInput";
+import { useTheme } from "../context/ThemeContext";
 import { ReactNode } from "react";
 
 type HistoryEntry = string | ReactNode;
@@ -31,6 +32,7 @@ export default function Terminal() {
     ],
   });
 
+  const { theme, setTheme } = useTheme();
   const terminalEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -39,9 +41,25 @@ export default function Terminal() {
 
   const handleCommand = (input: string) => {
     const commandKey = input.toLowerCase();
-    const command = commands[commandKey];
+
+    console.log("Received command:", commandKey);
 
     dispatch({ type: "ADD_ENTRY", entry: `> ${input}` });
+
+    if (commandKey === "dark") {
+      console.log("Switching theme to dark...");
+      setTheme("dark");
+      dispatch({ type: "ADD_ENTRY", entry: "Switched to dark mode." });
+      return;
+    }
+    if (commandKey === "light") {
+      console.log("Switching theme to light...");
+      setTheme("light");
+      dispatch({ type: "ADD_ENTRY", entry: "Switched to light mode." });
+      return;
+    }
+
+    const command = commands[commandKey];
 
     if (command) {
       if (commandKey === "clear") {
@@ -59,7 +77,7 @@ export default function Terminal() {
 
   return (
     <div
-      className="h-screen bg-black text-green-400 font-mono p-4 overflow-y-auto"
+      className="h-screen bg-[var(--background)] text-[var(--foreground)] font-mono p-4 overflow-y-auto"
       onClick={() => terminalEndRef.current?.scrollIntoView()}
     >
       {state.history.map((line, index) => (

@@ -28,7 +28,7 @@ export default function CommandInput({ onExecute }: CommandInputProps) {
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onKeyDown={handleKeyDown}
-        className="bg-black text-green-400 border-none outline-none w-full"
+        className="bg-[var(--background)] text-[var(--foreground)] border-none outline-none w-full"
         autoFocus
         aria-label="Command line input"
       />

@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light Mode (Default) */
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* Dark Mode */
+html[data-theme="dark"] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+/* Light Mode */
+html[data-theme="light"] {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+/* Apply Theme */
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
