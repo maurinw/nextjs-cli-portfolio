@@ -81,11 +81,11 @@ const handleThemeChange = (
   if (commandKey === "dark") {
     console.log("Switching theme to dark...");
     setTheme("dark");
-    dispatch({ type: "ADD_ENTRY", entry: "Switched theme to beautiful mode." });
+    dispatch({ type: "ADD_ENTRY", entry: "Switched theme to dark mode." });
   } else if (commandKey === "light") {
     console.log("Switching theme to light...");
     setTheme("light");
-    dispatch({ type: "ADD_ENTRY", entry: "Switched to the other mode..." });
+    dispatch({ type: "ADD_ENTRY", entry: "Switched theme to light mode." });
   }
 };
 
