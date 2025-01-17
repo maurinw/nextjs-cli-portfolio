@@ -8,6 +8,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <title>CLI</title>
+      </head>
       <body>
         <ThemeProvider>{children}</ThemeProvider>
       </body>

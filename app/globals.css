@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Light Mode (Default) */
+/* Dark Mode (Default) */
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
