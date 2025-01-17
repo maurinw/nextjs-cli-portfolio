@@ -1,7 +1,9 @@
+import DefaultFrame from "../components/DefaultFrame";
+
 export default function About() {
   return (
-    <div className="text-red-400">
-      <p>tbd.</p>
-    </div>
+    <DefaultFrame title="About">
+      <ul></ul>
+    </DefaultFrame>
   );
 }

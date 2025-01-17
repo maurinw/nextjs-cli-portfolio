@@ -1,7 +1,9 @@
+import DefaultFrame from "../components/DefaultFrame";
+
 export default function Contact() {
   return (
-    <div className="text-red-400">
-      <p>tbd.</p>
-    </div>
+    <DefaultFrame title="Contact">
+      <ul></ul>
+    </DefaultFrame>
   );
 }

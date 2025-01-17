@@ -3,6 +3,7 @@ import { useReducer, useRef, useEffect } from "react";
 import { commands } from "../commands/Commands";
 import CommandInput from "../commands/CommandInput";
 import { useTheme } from "../context/ThemeContext";
+import Welcome from "../sections/Welcome";
 import { ReactNode } from "react";
 
 type HistoryEntry = string | ReactNode;
@@ -26,10 +27,7 @@ function historyReducer(state: State, action: Action): State {
 
 export default function Terminal() {
   const [state, dispatch] = useReducer(historyReducer, {
-    history: [
-      "Welcome to my CLI Portfolio.",
-      "Type 'help' to see available commands.",
-    ],
+    history: [],
   });
 
   const { theme, setTheme } = useTheme();
@@ -80,6 +78,7 @@ export default function Terminal() {
       className="h-screen bg-[var(--background)] text-[var(--foreground)] font-mono p-4 overflow-y-auto"
       onClick={() => terminalEndRef.current?.scrollIntoView()}
     >
+      <Welcome /> {/* ✅ Show the Fancy Welcome Message */}
       {state.history.map((line, index) => (
         <div key={index} className="whitespace-pre-wrap">
           {line}

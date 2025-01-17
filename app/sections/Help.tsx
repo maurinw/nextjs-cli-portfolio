@@ -1,10 +1,9 @@
+import DefaultFrame from "../components/DefaultFrame";
+
 export default function Help() {
   return (
-    <div className="p-4 border rounded-lg w-fit bg-[var(--background)] border-[var(--foreground)]">
-      <h2 className="text-lg font-bold underline mb-2 text-[var(--foreground)]">
-        Available Commands:
-      </h2>
-      <ul className="list-none space-y-1">
+    <DefaultFrame title="Available Commands">
+      <ul className="list-none space-y-2">
         <li>
           <span className="font-semibold text-blue-500 dark:text-yellow-400">
             help
@@ -48,6 +47,6 @@ export default function Help() {
           - Switches to light mode
         </li>
       </ul>
-    </div>
+    </DefaultFrame>
   );
 }
