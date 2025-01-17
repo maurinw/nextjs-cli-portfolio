@@ -1,10 +1,10 @@
-"use client";
 import { useReducer, useRef, useEffect } from "react";
 import { commands } from "../commands/Commands";
-import CommandInput from "../commands/CommandInput";
 import { useTheme } from "../context/ThemeContext";
-import Welcome from "../sections/Welcome";
 import { ReactNode } from "react";
+
+import CommandInput from "../commands/CommandInput";
+import Welcome from "./Welcome";
 
 type HistoryEntry = string | ReactNode;
 
@@ -42,7 +42,14 @@ export default function Terminal() {
 
     console.log("Received command:", commandKey);
 
-    dispatch({ type: "ADD_ENTRY", entry: `> ${input}` });
+    dispatch({
+      type: "ADD_ENTRY",
+      entry: (
+        <div>
+          <span className="text-green-300">{">"}</span> {input}
+        </div>
+      ),
+    });
 
     if (commandKey === "dark") {
       console.log("Switching theme to dark...");
@@ -74,18 +81,19 @@ export default function Terminal() {
   };
 
   return (
-    <div
-      className="h-screen bg-[var(--background)] text-[var(--foreground)] font-mono p-4 overflow-y-auto"
-      onClick={() => terminalEndRef.current?.scrollIntoView()}
-    >
-      <Welcome /> {/* ✅ Show the Fancy Welcome Message */}
-      {state.history.map((line, index) => (
-        <div key={index} className="whitespace-pre-wrap">
-          {line}
-        </div>
-      ))}
-      <CommandInput onExecute={handleCommand} />
-      <div ref={terminalEndRef} />
+    <div className="h-screen bg-[var(--background)] text-[var(--foreground)] font-mono flex flex-col items-center">
+      <div className="w-full flex justify-center mt-8">
+        <Welcome />
+      </div>
+      <div className="w-full max-w-screen-md md:w-3/5 p-4 border border-[var(--foreground)] rounded-lg shadow-lg overflow-y-auto mt-4">
+        {state.history.map((line, index) => (
+          <div key={index} className="whitespace-pre-wrap">
+            {line}
+          </div>
+        ))}
+        <CommandInput onExecute={handleCommand} />
+        <div ref={terminalEndRef} />
+      </div>
     </div>
   );
 }

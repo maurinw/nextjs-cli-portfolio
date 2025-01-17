@@ -6,11 +6,11 @@ export default function DefaultFrame({
   children: React.ReactNode;
 }) {
   return (
-    <div className="p-6 border rounded-lg w-fit bg-[var(--background)] border-[var(--foreground)] mt-4 mb-4 shadow-lg">
-      <h2 className="text-lg font-bold underline mb-3 text-[var(--foreground)] text-center">
+    <div className="p-4 w-fit bg-[var(--background)] mt-2 mb-2">
+      <h2 className="text-lg font-bold underline mb-3 text-[var(--foreground)]">
         {title}
       </h2>
-      <div className="space-y-2">{children}</div>
+      <div className="space-y-1">{children}</div>
     </div>
   );
 }

@@ -5,28 +5,28 @@ export default function Help() {
     <DefaultFrame title="Available Commands">
       <ul className="list-none space-y-2">
         <li>
-          <span className="font-semibold text-blue-500 dark:text-yellow-400">
-            help
-          </span>{" "}
-          - Lists all available commands
-        </li>
-        <li>
-          <span className="font-semibold text-blue-500 dark:text-yellow-400">
+          <span className="font-semibold text-red-500 dark:text-red-400">
             about
           </span>{" "}
           - Displays information about me
         </li>
         <li>
-          <span className="font-semibold text-blue-500 dark:text-yellow-400">
+          <span className="font-semibold text-red-500 dark:text-red-400">
             projects
           </span>{" "}
           - Lists my projects
         </li>
         <li>
-          <span className="font-semibold text-blue-500 dark:text-yellow-400">
+          <span className="font-semibold text-red-500 dark:text-red-400">
             contact
           </span>{" "}
           - Shows contact information
+        </li>
+        <li>
+          <span className="font-semibold text-blue-500 dark:text-yellow-400">
+            help
+          </span>{" "}
+          - Lists all available commands
         </li>
         <li>
           <span className="font-semibold text-blue-500 dark:text-yellow-400">
