@@ -26,15 +26,15 @@ export default function Help() {
         </li>
         <li>
           <span className="font-semibold text-[var(--info)]">dark</span> -
-          Switches to dark mode
+          Switches to beautiful mode
         </li>
         <li>
           <span className="font-semibold text-[var(--info)]">light</span> -
-          Switches to light mode
+          Switches to the other mode ..
         </li>
         <li>
           <span className="font-semibold text-[var(--special)]">snake</span> -
-          Well ...
+          If you're bored...
         </li>
       </ul>
     </DefaultFrame>

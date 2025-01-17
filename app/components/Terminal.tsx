@@ -39,10 +39,6 @@ export default function Terminal() {
     dispatch({ type: "ADD_ENTRY", entry: commandOutput });
 
     if (commandKey === "dark" || commandKey === "light") {
-      dispatch({
-        type: "ADD_ENTRY",
-        entry: commandOutput,
-      });
       handleThemeChange(commandKey, setTheme, dispatch);
       return;
     }
@@ -85,11 +81,11 @@ const handleThemeChange = (
   if (commandKey === "dark") {
     console.log("Switching theme to dark...");
     setTheme("dark");
-    dispatch({ type: "ADD_ENTRY", entry: "Switched to dark mode." });
+    dispatch({ type: "ADD_ENTRY", entry: "Switched theme to beautiful mode." });
   } else if (commandKey === "light") {
     console.log("Switching theme to light...");
     setTheme("light");
-    dispatch({ type: "ADD_ENTRY", entry: "Switched to light mode." });
+    dispatch({ type: "ADD_ENTRY", entry: "Switched to the other mode..." });
   }
 };
 

@@ -13,7 +13,19 @@ export default function Landing() {
       setLoading(false);
     }, 4000);
 
-    return () => clearTimeout(timer);
+    // Prevent scrolling with ArrowUp and ArrowDown keys
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
   }, []);
 
   return <div>{loading ? <LoadingBar /> : <Terminal />}</div>;
