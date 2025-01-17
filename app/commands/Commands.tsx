@@ -2,6 +2,7 @@ import About from "../sections/About";
 import Projects from "../sections/Projects";
 import Contact from "../sections/Contact";
 import Help from "../sections/Help";
+import Snake from "../sections/Snake";
 import { ReactNode } from "react";
 
 export type Command = {
@@ -25,6 +26,10 @@ export const commands: Record<string, Command> = {
   contact: {
     description: "Contact information",
     execute: () => <Contact />,
+  },
+  snake: {
+    description: "Play Snake",
+    execute: () => <Snake />,
   },
   clear: {
     description: "Clears the terminal",
