@@ -21,10 +21,6 @@ export default function Help() {
           - Shows contact information
         </li>
         <li>
-          <span className="font-semibold text-[var(--info)]">help</span> - Lists
-          all available commands
-        </li>
-        <li>
           <span className="font-semibold text-[var(--info)]">clear</span> -
           Clears the terminal
         </li>
