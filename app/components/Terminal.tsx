@@ -31,14 +31,16 @@ export default function Terminal() {
 
     console.log("Received command:", commandKey);
 
+    const commandOutput = (
+      <div>
+        <span className="text-[var(--symb)]">{">"}</span> {input}
+      </div>
+    );
+
     if (commandKey === "dark" || commandKey === "light") {
       dispatch({
         type: "ADD_ENTRY",
-        entry: (
-          <div>
-            <span className="text-green-300">{">"}</span> {input}
-          </div>
-        ),
+        entry: commandOutput,
       });
       handleThemeChange(commandKey, setTheme, dispatch);
       return;
@@ -46,11 +48,7 @@ export default function Terminal() {
 
     dispatch({
       type: "ADD_ENTRY",
-      entry: (
-        <div>
-          <span className="text-green-300">{">"}</span> {input}
-        </div>
-      ),
+      entry: commandOutput,
     });
 
     handleCommandExecution(commandKey, dispatch);
@@ -112,9 +110,9 @@ const handleCommandExecution = (commandKey: string, dispatch: Function) => {
     dispatch({
       type: "ADD_ENTRY",
       entry: (
-        <div className="text-red-500">
+        <div className="text-[var(--warn)]">
           Command not found. Type{" "}
-          <span className="text-blue-500 dark:text-yellow-400">'help'</span> to
+          <span className="text-[var(--info)] font-semibold">'help'</span> to
           see available commands.
         </div>
       ),

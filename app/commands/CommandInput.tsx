@@ -21,7 +21,7 @@ export default function CommandInput({ onExecute }: CommandInputProps) {
 
   return (
     <div className="flex">
-      <span className="text-green-300 mr-2">$</span>
+      <span className="mr-2 mr-2 text-[var(--symb)]">$</span>
       <input
         ref={inputRef}
         type="text"

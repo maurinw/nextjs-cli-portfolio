@@ -6,18 +6,27 @@
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --info: #ffbd41;
+  --warn: #c9160f;
+  --symb: #10b935;
 }
 
 /* Dark Mode */
 html[data-theme="dark"] {
   --background: #0a0a0a;
   --foreground: #ededed;
+  --info: #ffbd41;
+  --warn: #c9160f;
+  --symb: #10b935;
 }
 
 /* Light Mode */
 html[data-theme="light"] {
   --background: #ffffff;
   --foreground: #171717;
+  --info: #0d187c;
+  --warn: #c9160f;
+  --symb: #000000;
 }
 
 /* Apply Theme */
